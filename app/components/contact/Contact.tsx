@@ -1,9 +1,10 @@
 "use client"
 import React, { useEffect } from 'react'
-import { selectStatus, fetchContactAsync, selectContact } from '@/lib/features/contact/contactSlice'
+import { selectStatus, fetchContactAsync, deleteContactAsync, selectContact } from '@/lib/features/contact/contactSlice'
 import { useAppDispatch, useAppSelector } from '@/lib/hooks'
 import Avatar from '../avatar/Avatar';
 import { Metadata } from 'next';
+import { updateContactApi } from '@/lib/features/contact/contactAPI';
 
 const Contact = () => {
 
@@ -15,6 +16,13 @@ const Contact = () => {
     dispatch(fetchContactAsync())
   }, [dispatch])
 
+  const handleDelete = (id: string) => {
+    dispatch(deleteContactAsync(id))
+  }
+  const handleUpdate = () => {
+
+  }
+
   if (status === 'loading') {
     return <div className="flex justify-center items-center h-screen text-gray-700">Loading...</div>;
   }
@@ -25,15 +33,29 @@ const Contact = () => {
   return (
     <div className="p-4 w-full">
       {contacts.length > 0 ? (
-        <ul className="space-y-4">
-          {contacts.map(contact => (
-            <li key={contact.id} className="p-4 border rounded-lg shadow-sm bg-white">
-              <p className="text-lg font-semibold">Name: {contact.firstName} {contact.lastName}</p>
-              <p className="text-lg font-semibold">Age: {contact.age}</p>
-              <Avatar name={contact.firstName} src={contact.photo} alt={`${contact.firstName} ${contact.lastName}`} />
-            </li>
-          ))}
-        </ul>
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr className="w-full bg-gray-100 border-b">
+              <th className="p-4 text-left font-semibold">Photo</th>
+              <th className="p-4 text-left font-semibold">Name</th>
+              <th className="p-4 text-left font-semibold">Age</th>
+              <th className="p-4 text-left font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {contacts.map(contact => (
+              <tr key={contact.id} className="border-b hover:bg-gray-50">
+                <td className="p-4"><Avatar name={contact.firstName} src={contact.photo} alt={`${contact.firstName} ${contact.lastName}`} /></td>
+                <td className="p-4">{contact.firstName} {contact.lastName}</td>
+                <td className="p-4">{contact.age}</td>
+                <td className="p-4">
+                  <button onClick={() => { }} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded">Update</button>
+                  <button onClick={() => handleDelete(contact.id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         <div className="text-center text-gray-700">No contact information available.</div>
       )}

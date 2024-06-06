@@ -1,5 +1,5 @@
 import { createAppSlice } from "@/lib/createAppSlice";
-import { fetchContactApi, addContactApi } from "./contactAPI";
+import { fetchContactApi, addContactApi, deleteContactApi, updateContactApi } from "./contactAPI";
 
 export interface Contact {
   id: string;
@@ -19,6 +19,15 @@ const initialState: ContactSliceState = {
   status: "idle",
 }
 
+const asyncThunkHandlers = {
+  pending: (state: ContactSliceState) => {
+    state.status = "loading";
+  },
+  rejected: (state: ContactSliceState) => {
+    state.status = "failed";
+  },
+};
+
 export const contactSlice = createAppSlice({
   name: "contact",
   initialState,
@@ -29,16 +38,12 @@ export const contactSlice = createAppSlice({
         return response.data
       },
       {
-        pending: (state) => {
-          state.status = "loading"
-        },
+        ...asyncThunkHandlers,
         fulfilled: (state, action) => {
           state.status = "idle"
           state.value = action.payload
         },
-        rejected: (state) => {
-          state.status = "failed"
-        }
+
       }
     ),
     addContact: create.asyncThunk(
@@ -47,16 +52,39 @@ export const contactSlice = createAppSlice({
         return response.data
       },
       {
-        pending: (state) => {
-          state.status = "loading";
-        },
+        ...asyncThunkHandlers,
         fulfilled: (state, action) => {
           state.status = "idle";
           state.value = [...state.value, action.payload]
         },
-        rejected: (state) => {
-          state.status = "failed";
-        }
+      }
+    ),
+    deleteContactAsync: create.asyncThunk(
+      async (payload: string) => {
+        const response = await deleteContactApi(payload);
+        return response.data;
+      },
+      {
+        ...asyncThunkHandlers,
+        fulfilled: (state, action) => {
+          state.status = "idle";
+          state.value = state.value.filter(contact => contact.id !== action.payload.id);
+        },
+      }
+    ),
+    updateContactAsync: create.asyncThunk(
+      async ({ id, payload }: { id: string, payload: Contact }) => {
+        const response = await updateContactApi(id, payload);
+        console.log(id, payload)
+        return response.data;
+      },
+      {
+        ...asyncThunkHandlers,
+        fulfilled: (state, action) => {
+          state.status = "idle";
+          state.value = state.value.filter((contact) => contact.id !== action.payload.id);
+        },
+
       }
     )
   }),
@@ -67,5 +95,5 @@ export const contactSlice = createAppSlice({
   }
 })
 
-export const { fetchContactAsync, addContact } = contactSlice.actions;
+export const { fetchContactAsync, addContact, updateContactAsync, deleteContactAsync } = contactSlice.actions;
 export const { selectContact, selectStatus } = contactSlice.selectors
