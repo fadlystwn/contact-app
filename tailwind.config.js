@@ -1,6 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -12,9 +11,6 @@ const nextConfig = {
   theme: {
     extend: {},
   },
-  images: {
-    domains: ['via.placeholder.com', 'example.com']
-  },
-};
+  plugins: [],
+}
 
-export default nextConfig;
