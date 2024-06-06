@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { FC, useState } from 'react';
 
 type AvatarProps = {
-  src?: string;  // Make src optional
+  src?: string;
   name: string;
   alt?: string;
 };
@@ -20,15 +20,15 @@ const Avatar: FC<AvatarProps> = ({ src, name, alt = '' }) => {
     return initials.toUpperCase();
   };
 
-  const width = 128;
-  const height = 128;
+  const width = 32;
+  const height = 32;
 
   const isValidSrc = src && (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/'));
 
   return (
     <div className={`flex items-center justify-center bg-gray-200 text-gray-700 rounded-full`} style={{ width, height }}>
       {imageError || !isValidSrc ? (
-        <span className="text-3xl font-bold">{getInitials(name)}</span>
+        <span className="font-bold">{getInitials(name)}</span>
       ) : (
         <Image
           className="object-cover rounded-full"
