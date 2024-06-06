@@ -3,13 +3,12 @@ import Image from 'next/image';
 import React, { FC, useState } from 'react';
 
 type AvatarProps = {
-  src: string;
+  src?: string;  // Make src optional
   name: string;
-  alt: string;
-  size?: string;
+  alt?: string;
+};
 
-}
-const Avatar: FC<AvatarProps> = ({ src, name, alt, size = 'w-24 h-24' }) => {
+const Avatar: FC<AvatarProps> = ({ src, name, alt = '' }) => {
   const [imageError, setImageError] = useState(false);
 
   const handleError = () => {
@@ -17,22 +16,26 @@ const Avatar: FC<AvatarProps> = ({ src, name, alt, size = 'w-24 h-24' }) => {
   };
 
   const getInitials = (name: string) => {
-    return name ? name.charAt(0).toUpperCase() : '';
+    const initials = name.split(' ').map(n => n[0]).join('');
+    return initials.toUpperCase();
   };
 
-  const hasImageSrc = src === 'N/A' ? 'https://via.placeholder.com/150' : src;
+  const width = 128;
+  const height = 128;
+
+  const isValidSrc = src && (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/'));
 
   return (
-    <div className={`flex items-center justify-center bg-gray-200 text-gray-700 rounded-full ${size}`}>
-      {imageError || !src ? (
+    <div className={`flex items-center justify-center bg-gray-200 text-gray-700 rounded-full`} style={{ width, height }}>
+      {imageError || !isValidSrc ? (
         <span className="text-3xl font-bold">{getInitials(name)}</span>
       ) : (
         <Image
-          className={`object-cover rounded-full ${size}`}
-          src={hasImageSrc}
+          className="object-cover rounded-full"
+          src={src}
           alt={alt || name}
-          width={32}
-          height={32}
+          width={width}
+          height={height}
           onError={handleError}
         />
       )}
