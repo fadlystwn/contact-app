@@ -40,41 +40,45 @@ const ContactList = () => {
     <>
       <div className="p-4 w-full">
         {contacts.length > 0 ? (
-          <table className="min-w-full bg-white border">
-            <thead>
-              <tr className="w-full bg-gray-100 border-b">
-                <th className="p-4 text-left font-semibold">Photo</th>
-                <th className="p-4 text-left font-semibold">Name</th>
-                <th className="p-4 text-left font-semibold">Age</th>
-                <th className="p-4 text-left font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {contacts.map(contact => (
-                <tr key={contact.id} className="border-b hover:bg-gray-50">
-                  <td className="p-4">
-                    <Avatar name={contact.firstName} src={contact.photo} alt={`${contact.firstName} ${contact.lastName}`} />
-                  </td>
-                  <td className="p-4">{contact.firstName} {contact.lastName}</td>
-                  <td className="p-4">{contact.age}</td>
-                  <td className="p-4">
-                    <button
-                      onClick={() => handleUpdate(contact)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => handleDelete(contact.id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto bg-white border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100 border-b border-gray-200">
+                  <th className="p-4 text-left font-semibold">Photo</th>
+                  <th className="p-4 text-left font-semibold">Name</th>
+                  <th className="p-4 text-left font-semibold">Age</th>
+                  <th className="p-4 text-left font-semibold">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {contacts.map(contact => (
+                  <tr key={contact.id} className="border-b border-gray-200 hover:bg-gray-50">
+                    <td className="p-4">
+                      <Avatar name={contact.firstName} src={contact.photo} alt={`${contact.firstName} ${contact.lastName}`} />
+                    </td>
+                    <td className="p-4">{contact.firstName} {contact.lastName}</td>
+                    <td className="p-4">{contact.age}</td>
+                    <td className="p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0">
+                        <button
+                          onClick={() => handleUpdate(contact)}
+                          className="bg-transparent border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => handleDelete(contact.id)}
+                          className="bg-transparent border border-red-500 text-red-500 hover:bg-red-500 hover:text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="text-center text-gray-700">No contact information available.</div>
         )}
@@ -86,6 +90,8 @@ const ContactList = () => {
           <div className="text-center text-gray-700">No contact selected for update.</div>
         )}
       </UpdateContactModal>
+
+
     </>
   );
 };
