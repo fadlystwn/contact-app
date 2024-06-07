@@ -1,53 +1,12 @@
 import type { Contact } from "./contactSlice";
+import fetchApi from "@/app/utils/fetchApi";
 
-export const fetchContactApi = async () => {
-  const response = await fetch("https://contact.herokuapp.com/contact", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" }
-  });
+export const fetchContactApi = () => fetchApi("https://contact.herokuapp.com/contact", "GET");
 
-  const result: { data: any } = await response.json();
-  return result;
-}
+export const fetchByIdApi = (id: string) => fetchApi(`https://contact.herokuapp.com/contact/${id}`, "GET");
 
-export const fetchByIdApi = async (id: string) => {
-  const response = await fetch(`https://contact.herokuapp.com/contact/${id}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" }
-  });
+export const addContactApi = (contact: Contact) => fetchApi("https://contact.herokuapp.com/contact", "POST", contact);
 
-  const result: { data: any } = await response.json();
-  return result;
-}
+export const deleteContactApi = (id: string) => fetchApi(`https://contact.herokuapp.com/contact/${id}`, "DELETE");
 
-export const addContactApi = async (contact: Contact) => {
-  const response = await fetch("https://contact.herokuapp.com/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(contact)
-  });
-
-  const result: { data: any } = await response.json();
-  return result;
-}
-
-export const deleteContactApi = async (id: string) => {
-  const response = await fetch(`https://contact.herokuapp.com/contact/${id}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" }
-  });
-
-  const result: { data: any } = await response.json();
-  return result;
-}
-
-export const updateContactApi = async (id: string, contact: Contact) => {
-  const response = await fetch(`https://contact.herokuapp.com/contact/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(contact)
-  });
-
-  const result: { data: any } = await response.json();
-  return result;
-}
+export const updateContactApi = (id: string, contact: Contact) => fetchApi(`https://contact.herokuapp.com/contact/${id}`, "PUT", contact);
