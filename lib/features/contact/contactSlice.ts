@@ -46,7 +46,7 @@ export const contactSlice = createAppSlice({
 
       }
     ),
-    addContact: create.asyncThunk(
+    addContactAsync: create.asyncThunk(
       async (payload: Contact) => {
         const response = await addContactApi(payload)
         return response.data
@@ -95,5 +95,5 @@ export const contactSlice = createAppSlice({
   }
 })
 
-export const { fetchContactAsync, addContact, updateContactAsync, deleteContactAsync } = contactSlice.actions;
+export const { fetchContactAsync, addContactAsync, updateContactAsync, deleteContactAsync } = contactSlice.actions;
 export const { selectContact, selectStatus } = contactSlice.selectors
